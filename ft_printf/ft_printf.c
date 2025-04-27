@@ -1,7 +1,9 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+#include <libft.h>
 
+/*
 void	ft_putstr(const char* str)
 {
 	while (str && *str)
@@ -16,6 +18,7 @@ int	ft_strlen(char *str)
 		count ++;
 	return (count);
 }
+*/
 
 int ft_printf(const char * format, ...)
 {
@@ -58,7 +61,7 @@ int ft_printf(const char * format, ...)
 						char *str = va_arg(args, char*);
 						int len = 0;
 						len = ft_strlen(str);
-						ft_putstr(str);
+						ft_putstr_fd(str, 1);
 						count += len;
 						ptr += len;
 					}

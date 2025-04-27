@@ -1,7 +1,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-#include <libft.h>
+#include "libft.h"
 
 /*
 void	ft_putstr(const char* str)
@@ -65,6 +65,13 @@ int ft_printf(const char * format, ...)
 						count += len;
 						ptr += len;
 					}
+					else if (*(ptr + 1) == 'd') // Handle int format
+					{
+						int arg = va_arg(args, int);
+						(void)arg;
+						arg += 0; // just to bp with gdp
+					}
+
 				}
 			}
 			ptr++;

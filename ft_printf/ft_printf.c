@@ -75,11 +75,20 @@ int ft_printf(const char * format, ...)
 				}
 				else if (conversion == 's')
 				{
-					char *arg = va_arg(args, char*);
 					int len = 0;
-					len = ft_strlen(arg);
-					ft_putstr_fd(arg, 1);
-					count += len;
+					char *arg = va_arg(args, char*);
+
+					if (arg == NULL)
+					{
+						ft_putstr_fd("(null)", 1);
+						count += 6;
+					}
+					else
+					{
+						len = ft_strlen(arg);
+						ft_putstr_fd(arg, 1);
+						count += len;
+					}
 					format += 1;
 				}
 				else if (conversion == 'p')

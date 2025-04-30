@@ -12,6 +12,19 @@ int ft_count_digits_hex(unsigned long nb)
 
 }
 
+int ft_count_digits_dec(int nb)
+{
+	if (nb == 0)
+		return 1;
+	if (nb < 0)
+		return 1 + ft_count_digits_dec(-(nb / 10));
+	if (nb < 10)
+		return 1;
+	return 1 + ft_count_digits_dec(nb / 10);
+
+}
+
+
 void	ft_putnbr_hex(unsigned long nbr)
 {
 	char *charset = "0123456789abcdef";
@@ -108,6 +121,13 @@ int ft_printf(const char * format, ...)
 						count += 2;
 						count += ft_count_digits_hex((unsigned long)arg);
 					}
+					format += 1;
+				}
+				else if (conversion == 'd')
+				{
+					int arg = va_arg(args, int);
+					ft_putnbr_fd(arg, 1);
+					count += ft_count_digits_dec(arg);
 					format += 1;
 				}
 			}

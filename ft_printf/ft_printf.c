@@ -16,8 +16,10 @@ int ft_count_digits_dec(int nb)
 {
 	if (nb == 0)
 		return 1;
+	if (nb <= -10)
+		return 2 + ft_count_digits_dec(-(nb / 10));
 	if (nb < 0)
-		return 1 + ft_count_digits_dec(-(nb / 10));
+		return 2;
 	if (nb < 10)
 		return 1;
 	return 1 + ft_count_digits_dec(nb / 10);

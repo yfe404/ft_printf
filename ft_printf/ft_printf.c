@@ -180,6 +180,13 @@ int ft_printf(const char * format, ...)
 					count += ft_count_digits_hex((unsigned long)arg);
 					format += 1;
 				}
+				else if (conversion == 'X')
+				{
+					unsigned int arg = va_arg(args, unsigned int);
+					ft_putnbr_hex((unsigned long)arg, 1);
+					count += ft_count_digits_hex((unsigned long)arg);
+					format += 1;
+				}
 
 			}
 			else

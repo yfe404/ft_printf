@@ -96,10 +96,18 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'p')
 				{
 					void *arg = va_arg(args, void*);
-					write(1, "0x", 2);
-					ft_putnbr_hex((unsigned long)arg);
-					count += 2;
-					count += ft_count_digits_hex((unsigned long)arg);
+					if (arg == NULL)
+					{
+						ft_putstr_fd("(nil)", 1);
+						count += 5;
+					}
+					else
+					{
+						write(1, "0x", 2);
+						ft_putnbr_hex((unsigned long)arg);
+						count += 2;
+						count += ft_count_digits_hex((unsigned long)arg);
+					}
 					format += 1;
 				}
 			}

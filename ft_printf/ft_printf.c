@@ -132,6 +132,14 @@ int ft_printf(const char * format, ...)
 					count += ft_count_digits_dec(arg);
 					format += 1;
 				}
+				else if (conversion == 'i')
+				{
+					int arg = va_arg(args, int);
+					ft_putnbr_fd(arg, 1);
+					count += ft_count_digits_dec(arg);
+					format += 1;
+				}
+
 			}
 			else
 			{

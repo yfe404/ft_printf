@@ -47,19 +47,26 @@ void	ft_putuint(unsigned int nbr)
 
 }
 
-void	ft_putnbr_hex(unsigned long nbr)
+void	ft_putnbr_hex(unsigned long nbr, unsigned char upper)
 {
 	char *charset = "0123456789abcdef";
+	char *charsetU = "0123456789ABCDEF";
 
 	if (nbr < 16)
 	{
-		ft_putchar_fd(charset[nbr], 1);
+		if (upper)	
+			ft_putchar_fd(charsetU[nbr], 1);
+		else
+			ft_putchar_fd(charset[nbr], 1);
 		return;
 	}
 	if (nbr)
 	{
-		ft_putnbr_hex(nbr / 16);
-		ft_putchar_fd(charset[nbr % 16], 1);
+		ft_putnbr_hex(nbr / 16, upper);
+		if (upper)
+			ft_putchar_fd(charsetU[nbr % 16], 1);
+		else
+			ft_putchar_fd(charset[nbr % 16], 1);
 	}
 }
 
@@ -76,8 +83,8 @@ int ft_printf(const char * format, ...)
 	// d: int (signed decimal notation)
 	// i: same as d ? 
 	// u: unsigned int argument (unsigned decimal notation)
-	// x: unsinged int argument (unsigned hexadecimal lowercase abcdef)
-	// X: unsinged int argument (unsigned hexadecimal uppercase ABCDEF)
+	// x: unsigned int argument (unsigned hexadecimal lowercase abcdef)
+	// X: unsigned int argument (unsigned hexadecimal uppercase ABCDEF)
 	// %: used for formatting, in front of a '%', prints % litterally. 
 	
 	//	int x = va_arg(args, int);
@@ -139,7 +146,7 @@ int ft_printf(const char * format, ...)
 					else
 					{
 						write(1, "0x", 2);
-						ft_putnbr_hex((unsigned long)arg);
+						ft_putnbr_hex((unsigned long)arg, 0);
 						count += 2;
 						count += ft_count_digits_hex((unsigned long)arg);
 					}
@@ -166,6 +173,14 @@ int ft_printf(const char * format, ...)
 					count += ft_count_digits_uint(arg);
 					format += 1;
 				}
+				else if (conversion == 'x')
+				{
+					unsigned int arg = va_arg(args, unsigned int);
+					ft_putnbr_hex((unsigned long)arg, 0);
+					count += ft_count_digits_hex((unsigned long)arg);
+					format += 1;
+				}
+
 			}
 			else
 			{

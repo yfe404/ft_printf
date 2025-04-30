@@ -106,11 +106,7 @@ int ft_printf(const char * format, ...)
     			format = parse_precision(format, &flags);
 
 				char conversion = *format;
-				if (conversion == '%')
-				{
-					write(STDOUT_FILENO, format, 1);
-				}
-				else if (conversion == 'c')
+				if (conversion == 'c')
 				{
 					char arg = va_arg(args, int);
 					write(STDOUT_FILENO, &arg, 1);
@@ -187,7 +183,12 @@ int ft_printf(const char * format, ...)
 					count += ft_count_digits_hex((unsigned long)arg);
 					format += 1;
 				}
-
+				else if (conversion == '%')
+				{
+					ft_putchar_fd('%', 1);
+					count += 1;
+					format += 1;
+				}
 			}
 			else
 			{

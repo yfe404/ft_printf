@@ -6,7 +6,7 @@
 
 int ft_count_digits_hex(unsigned long nb)
 {
-	if (nb == 0)	
+	if (nb < 16)	
 		return 1;
 	return 1 + ft_count_digits_hex(nb / 16);
 
@@ -16,9 +16,11 @@ void	ft_putnbr_hex(unsigned long nbr)
 {
 	char *charset = "0123456789abcdef";
 
-	write(1, "0x", 2);
-	if (nbr == 0)
-		ft_putchar_fd('0', 1);
+	if (nbr < 16)
+	{
+		ft_putchar_fd(charset[nbr], 1);
+		return;
+	}
 	if (nbr)
 	{
 		ft_putnbr_hex(nbr / 16);
@@ -94,9 +96,11 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'p')
 				{
 					void *arg = va_arg(args, void*);
+					write(1, "0x", 2);
 					ft_putnbr_hex((unsigned long)arg);
+					count += 2;
 					count += ft_count_digits_hex((unsigned long)arg);
-					format += sizeof(void*);
+					format += 1;
 				}
 			}
 			else

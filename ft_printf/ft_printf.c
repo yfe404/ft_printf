@@ -23,9 +23,29 @@ int ft_count_digits_dec(int nb)
 	if (nb < 10)
 		return 1;
 	return 1 + ft_count_digits_dec(nb / 10);
-
 }
 
+int	ft_count_digits_uint(unsigned int nbr)
+{
+	if (nbr < 10)	
+		return 1;
+	return 1 + ft_count_digits_uint(nbr / 10);
+}
+
+void	ft_putuint(unsigned int nbr)
+{
+	if (nbr < 10)
+	{
+		ft_putchar_fd(nbr + '0', 1);
+		return;
+	}
+	if (nbr)
+	{
+		ft_putuint(nbr / 10);
+		ft_putchar_fd((nbr % 10) + '0', 1);
+	}
+
+}
 
 void	ft_putnbr_hex(unsigned long nbr)
 {
@@ -139,7 +159,13 @@ int ft_printf(const char * format, ...)
 					count += ft_count_digits_dec(arg);
 					format += 1;
 				}
-
+				else if (conversion == 'u')
+				{
+					unsigned int arg = va_arg(args, unsigned int);
+					ft_putuint(arg);
+					count += ft_count_digits_uint(arg);
+					format += 1;
+				}
 			}
 			else
 			{

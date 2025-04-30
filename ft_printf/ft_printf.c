@@ -2,23 +2,30 @@
 #include <stdarg.h>
 
 #include "libft.h"
+#include "parsing.h"
 
-/*
-void	ft_putstr(const char* str)
+int ft_count_digits_hex(unsigned long nb)
 {
-	while (str && *str)
-		write(STDOUT_FILENO, str++, 1);
+	if (nb == 0)	
+		return 1;
+	return 1 + ft_count_digits_hex(nb / 16);
+
 }
 
-int	ft_strlen(char *str)
+void	ft_putnbr_hex(unsigned long nbr)
 {
-	int count = 0;
+	char *charset = "0123456789abcdef";
 
-	while (str && str[count])
-		count ++;
-	return (count);
+	write(1, "0x", 2);
+	if (nbr == 0)
+		ft_putchar_fd('0', 1);
+	if (nbr)
+	{
+		ft_putnbr_hex(nbr / 16);
+		ft_putchar_fd(charset[nbr % 16], 1);
+	}
 }
-*/
+
 
 int ft_printf(const char * format, ...)
 {
@@ -42,17 +49,54 @@ int ft_printf(const char * format, ...)
 	int count = 0;
 	if (format && *format) 
 	{
-		unsigned char *ptr; // iterate over all the characters of the format string
-		ptr = (unsigned char*)format;
-
-		while (*ptr)
+		while (*format)
 		{
-			if (*ptr != '%')
+			if (*format == '%')
 			{
-				write(STDOUT_FILENO, ptr, 1);
-				count ++;
+				format++;
+				if (!format)
+					break;
+   				t_flags flags = init_flags();
+    			format = parse_flags(format, &flags);
+			    format = parse_width(format, &flags);
+    			format = parse_precision(format, &flags);
+
+				char conversion = *format;
+				if (conversion == '%')
+				{
+					write(STDOUT_FILENO, format, 1);
+				}
+				else if (conversion == 'c')
+				{
+					char arg = va_arg(args, int);
+					write(STDOUT_FILENO, &arg, 1);
+					count++;
+					format++;
+				}
+				else if (conversion == 's')
+				{
+					char *arg = va_arg(args, char*);
+					int len = 0;
+					len = ft_strlen(arg);
+					ft_putstr_fd(arg, 1);
+					count += len;
+					format += 1;
+				}
+				else if (conversion == 'p')
+				{
+					void *arg = va_arg(args, void*);
+					ft_putnbr_hex((unsigned long)arg);
+					count += ft_count_digits_hex((unsigned long)arg);
+					format += sizeof(void*);
+				}
+			}
+			else
+			{
+				write(STDOUT_FILENO, format, 1);
+				count++;
+				format++;
 			} 
-			else  // Handle format
+			/*else  // Handle format
 			{
 				if (*(ptr + 1)) 
 				{
@@ -73,8 +117,7 @@ int ft_printf(const char * format, ...)
 					}
 
 				}
-			}
-			ptr++;
+			} */
 		}
 	}
 

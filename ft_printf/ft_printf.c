@@ -273,15 +273,41 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'x')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
+
+					int len = ft_count_digits_hex((unsigned long)arg);
+					int delta = flags.width - len;
+					if ((delta > 0) && !flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
 					ft_putnbr_hex((unsigned long)arg, 0);
-					count += ft_count_digits_hex((unsigned long)arg);
+					if ((delta > 0) && flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
+					count += len;
 					format += 1;
 				}
 				else if (conversion == 'X')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
+
+					int len = ft_count_digits_hex((unsigned long)arg);
+					int delta = flags.width - len;
+					if ((delta > 0) && !flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
 					ft_putnbr_hex((unsigned long)arg, 1);
-					count += ft_count_digits_hex((unsigned long)arg);
+					if ((delta > 0) && flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
+					count += len;
 					format += 1;
 				}
 				else if (conversion == '%')

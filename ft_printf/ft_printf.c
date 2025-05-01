@@ -151,6 +151,14 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'd')
 				{
 					int arg = va_arg(args, int);
+					if (flags.space)
+					{
+						if (arg >= 0)
+						{
+							count++;
+							ft_putchar_fd(' ', 1);
+						}
+					}
 					ft_putnbr_fd(arg, 1);
 					count += ft_count_digits_dec(arg);
 					format += 1;
@@ -158,6 +166,14 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'i')
 				{
 					int arg = va_arg(args, int);
+					if (flags.space)
+					{
+						if (arg >= 0)
+						{
+							count++;
+							ft_putchar_fd(' ', 1);
+						}
+					}
 					ft_putnbr_fd(arg, 1);
 					count += ft_count_digits_dec(arg);
 					format += 1;

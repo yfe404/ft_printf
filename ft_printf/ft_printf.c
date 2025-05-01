@@ -268,13 +268,13 @@ int ft_printf(const char * format, ...)
 					int delta = flags.width - len;
 					if ((delta > 0) && !flags.minus && !flags.zero)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					ft_putuint(arg, flags.zero * delta);
 					if ((delta > 0) && flags.minus && !flags.zero)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					count += max(flags.width, len); 

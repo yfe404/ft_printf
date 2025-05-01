@@ -225,7 +225,7 @@ int ft_printf(const char * format, ...)
 					}
 					format += 1;
 				}
-				else if (conversion == 'd')
+				else if (conversion == 'd' || conversion == 'i')
 				{
 					int arg = va_arg(args, int);
 					char prefix;
@@ -253,32 +253,6 @@ int ft_printf(const char * format, ...)
 					}
 
 					count += max(flags.width, len); 
-					format += 1;
-				}
-				else if (conversion == 'i')
-				{
-					int arg = va_arg(args, int);
-					if (flags.space)
-					{
-						if (arg >= 0)
-							ft_putchar_fd(' ', 1);
-					}
-					flags.zero &= !(flags.precision || flags.minus);
-
-					int len = ft_count_digits_dec(arg) + flags.space * (arg >= 0); 
-					int delta = flags.width - len;
-					if ((delta > 0) && !flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					ft_putnbr_padding(arg, flags.zero * delta);
-					if ((delta > 0) && flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					count += max(flags.width, len);
 					format += 1;
 				}
 				else if (conversion == 'u')

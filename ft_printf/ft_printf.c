@@ -206,8 +206,21 @@ int ft_printf(const char * format, ...)
 							ft_putchar_fd(' ', 1);
 						}
 					}
+					int len = ft_count_digits_dec(arg) + flags.space * (arg >= 0); 
+					int delta = flags.width - len;
+					if ((delta > 0) && !flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
 					ft_putnbr_fd(arg, 1);
-					count += ft_count_digits_dec(arg);
+					if ((delta > 0) && flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
+
+					count += len; 
 					format += 1;
 				}
 				else if (conversion == 'i')

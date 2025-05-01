@@ -6,7 +6,7 @@
 [X] zero for u
 [X] zero for x
 [X] zero for X
-[ ] dot for s
+[X] dot for s
 [ ] dot for d
 [ ] dot for i
 [ ] dot for u

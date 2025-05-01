@@ -11,6 +11,13 @@ int max(int a, int b)
 	return b;
 }
 
+int min(int a, int b)
+{
+	if (a < b)
+		return a;
+	return b;
+}
+
 int ft_count_digits_hex(unsigned long nb)
 {
 	if (nb < 16)	
@@ -202,13 +209,24 @@ int ft_printf(const char * format, ...)
 							while (delta-- && ++count)
 								ft_putchar_fd(' ', 1);
 						}
-						ft_putstr_fd(arg, 1);
+						if (flags.dot)
+						{	count += min(len,flags.precision);
+							int iter = min(len, flags.precision);
+							int offset = 0;
+							while (iter--)
+								ft_putchar_fd(arg[offset++], 1);
+						}
+						else
+						{
+							ft_putstr_fd(arg, 1);
+							count += len;
+						}
 						if ((delta > 0) && flags.minus)
 						{
 							while (delta-- && ++count)
 								ft_putchar_fd(' ', 1);
 						}
-						count += len;
+						//count += len;
 					}
 					format += 1;
 				}

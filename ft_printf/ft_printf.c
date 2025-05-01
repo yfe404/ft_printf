@@ -39,8 +39,10 @@ int	ft_count_digits_uint(unsigned int nbr)
 	return 1 + ft_count_digits_uint(nbr / 10);
 }
 
-void	ft_putuint(unsigned int nbr)
+void	ft_putuint(unsigned int nbr, int padding)
 {
+	while (padding-- > 0)
+		ft_putchar_fd('0', 1);
 	if (nbr < 10)
 	{
 		ft_putchar_fd(nbr + '0', 1);
@@ -48,7 +50,7 @@ void	ft_putuint(unsigned int nbr)
 	}
 	if (nbr)
 	{
-		ft_putuint(nbr / 10);
+		ft_putuint(nbr / 10, 0);
 		ft_putchar_fd((nbr % 10) + '0', 1);
 	}
 
@@ -258,21 +260,23 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'u')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
+					flags.zero &= !(flags.precision || flags.minus);
 
 					int len = ft_count_digits_uint(arg);
 					int delta = flags.width - len;
-					if ((delta > 0) && !flags.minus)
+					if ((delta > 0) && !flags.minus && !flags.zero)
 					{
 						while (delta-- && ++count)
 							ft_putchar_fd(' ', 1);
 					}
-					ft_putuint(arg);
-					if ((delta > 0) && flags.minus)
+					ft_putuint(arg, flags.zero * delta);
+					if ((delta > 0) && flags.minus && !flags.zero)
 					{
 						while (delta-- && ++count)
 							ft_putchar_fd(' ', 1);
 					}
-					count += len; 
+					count += max(flags.width, len); 
+					//count += len; 
 					format += 1;
 				}
 				else if (conversion == 'x')

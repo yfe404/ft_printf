@@ -253,8 +253,21 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'u')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
+
+					int len = ft_count_digits_uint(arg);
+					int delta = flags.width - len;
+					if ((delta > 0) && !flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
 					ft_putuint(arg);
-					count += ft_count_digits_uint(arg);
+					if ((delta > 0) && flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
+					count += len; 
 					format += 1;
 				}
 				else if (conversion == 'x')

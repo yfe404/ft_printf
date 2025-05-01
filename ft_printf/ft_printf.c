@@ -4,6 +4,13 @@
 #include "libft.h"
 #include "parsing.h"
 
+int max(int a, int b)
+{
+	if (a > b)
+		return a;
+	return b;
+}
+
 int ft_count_digits_hex(unsigned long nb)
 {
 	if (nb < 16)	
@@ -120,13 +127,42 @@ int ft_printf(const char * format, ...)
 
 					if (arg == NULL)
 					{
+						if (flags.width > 6)
+						{
+							int count = flags.width - 6;
+							if (!flags.minus)
+							{
+								while (count--)
+									ft_putchar_fd(' ', 1);
+							}
+						}
 						ft_putstr_fd("(null)", 1);
-						count += 6;
+						if (flags.width > 6)
+						{
+							int count = flags.width - 6;
+							if (flags.minus)
+							{
+								while (count--)
+									ft_putchar_fd(' ', 1);
+							}
+						}
+						count += max(6, flags.width);
 					}
 					else
 					{
 						len = ft_strlen(arg);
+						int delta = flags.width - len;
+						if ((delta > 0) && !flags.minus)
+						{
+							while (delta-- && ++count)
+								ft_putchar_fd(' ', 1);
+						}
 						ft_putstr_fd(arg, 1);
+						if ((delta > 0) && flags.minus)
+						{
+							while (delta-- && ++count)
+								ft_putchar_fd(' ', 1);
+						}
 						count += len;
 					}
 					format += 1;

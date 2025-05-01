@@ -286,6 +286,12 @@ int ft_printf(const char * format, ...)
 						while (delta-- && ++count)
 							ft_putchar_fd(' ', 1);
 					}
+					if (arg && flags.hash)
+					{
+						ft_putstr_fd("0x", 1);
+						count += 2;
+					}
+						
 					ft_putnbr_hex((unsigned long)arg, 0);
 					if ((delta > 0) && flags.minus)
 					{
@@ -306,6 +312,12 @@ int ft_printf(const char * format, ...)
 						while (delta-- && ++count)
 							ft_putchar_fd(' ', 1);
 					}
+					if (arg && flags.hash)
+					{
+						ft_putstr_fd("0X", 1);
+						count += 2;
+					}
+
 					ft_putnbr_hex((unsigned long)arg, 1);
 					if ((delta > 0) && flags.minus)
 					{

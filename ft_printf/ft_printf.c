@@ -56,11 +56,13 @@ void	ft_putuint(unsigned int nbr, int padding)
 
 }
 
-void	ft_putnbr_hex(unsigned long nbr, unsigned char upper)
+void	ft_putnbr_hex(unsigned long nbr, unsigned char upper, int padding)
 {
 	char *charset = "0123456789abcdef";
 	char *charsetU = "0123456789ABCDEF";
 
+	while (padding-- > 0)
+		ft_putchar_fd('0', 1);
 	if (nbr < 16)
 	{
 		if (upper)	
@@ -71,7 +73,7 @@ void	ft_putnbr_hex(unsigned long nbr, unsigned char upper)
 	}
 	if (nbr)
 	{
-		ft_putnbr_hex(nbr / 16, upper);
+		ft_putnbr_hex(nbr / 16, upper, 0);
 		if (upper)
 			ft_putchar_fd(charsetU[nbr % 16], 1);
 		else
@@ -221,7 +223,7 @@ int ft_printf(const char * format, ...)
 					else
 					{
 						write(1, "0x", 2);
-						ft_putnbr_hex((unsigned long)arg, 0);
+						ft_putnbr_hex((unsigned long)arg, 0, 0);
 						count += 2;
 						count += ft_count_digits_hex((unsigned long)arg);
 					}
@@ -282,10 +284,11 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'x')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
+					flags.zero &= !(flags.precision || flags.minus);
 
 					int len = ft_count_digits_hex((unsigned long)arg);
 					int delta = flags.width - len;
-					if ((delta > 0) && !flags.minus)
+					if ((delta > 0) && !flags.minus && !flags.zero)
 					{
 						while (delta-- && ++count)
 							ft_putchar_fd(' ', 1);
@@ -296,13 +299,14 @@ int ft_printf(const char * format, ...)
 						count += 2;
 					}
 						
-					ft_putnbr_hex((unsigned long)arg, 0);
+					ft_putnbr_hex((unsigned long)arg, 0, delta);
 					if ((delta > 0) && flags.minus)
 					{
 						while (delta-- && ++count)
 							ft_putchar_fd(' ', 1);
 					}
-					count += len;
+					count += max(flags.width, len); 
+					//count += len;
 					format += 1;
 				}
 				else if (conversion == 'X')
@@ -322,7 +326,7 @@ int ft_printf(const char * format, ...)
 						count += 2;
 					}
 
-					ft_putnbr_hex((unsigned long)arg, 1);
+					ft_putnbr_hex((unsigned long)arg, 1, 0);
 					if ((delta > 0) && flags.minus)
 					{
 						while (delta-- && ++count)

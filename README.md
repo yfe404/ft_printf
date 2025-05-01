@@ -5,7 +5,7 @@
 [ ] minus for p
 [X] zero for u
 [X] zero for x
-[ ] zero for X
+[X] zero for X
 [ ] dot for s
 [ ] dot for d
 [ ] dot for i

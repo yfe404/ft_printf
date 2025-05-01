@@ -201,26 +201,23 @@ int ft_printf(const char * format, ...)
 					if (flags.space)
 					{
 						if (arg >= 0)
-						{
-							count++;
 							ft_putchar_fd(' ', 1);
-						}
 					}
 					int len = ft_count_digits_dec(arg) + flags.space * (arg >= 0); 
 					int delta = flags.width - len;
 					if ((delta > 0) && !flags.minus)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					ft_putnbr_fd(arg, 1);
 					if ((delta > 0) && flags.minus)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 
-					count += len; 
+					count += max(flags.width, len); 
 					format += 1;
 				}
 				else if (conversion == 'i')
@@ -229,25 +226,22 @@ int ft_printf(const char * format, ...)
 					if (flags.space)
 					{
 						if (arg >= 0)
-						{
-							count++;
 							ft_putchar_fd(' ', 1);
-						}
 					}
 					int len = ft_count_digits_dec(arg) + flags.space * (arg >= 0); 
 					int delta = flags.width - len;
 					if ((delta > 0) && !flags.minus)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					ft_putnbr_fd(arg, 1);
 					if ((delta > 0) && flags.minus)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
-					count += ft_count_digits_dec(arg);
+					count += max(flags.width, len);
 					format += 1;
 				}
 				else if (conversion == 'u')

@@ -290,7 +290,7 @@ int ft_printf(const char * format, ...)
 					int delta = flags.width - len;
 					if ((delta > 0) && !flags.minus && !flags.zero)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					if (arg && flags.hash)
@@ -299,10 +299,10 @@ int ft_printf(const char * format, ...)
 						count += 2;
 					}
 						
-					ft_putnbr_hex((unsigned long)arg, 0, delta);
-					if ((delta > 0) && flags.minus)
+					ft_putnbr_hex((unsigned long)arg, 0, flags.zero * delta);
+					if ((delta > 0) && flags.minus && !flags.zero)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					count += max(flags.width, len); 
@@ -318,7 +318,7 @@ int ft_printf(const char * format, ...)
 					int delta = flags.width - len;
 					if ((delta > 0) && !flags.minus && !flags.zero)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					if (arg && flags.hash)
@@ -327,10 +327,10 @@ int ft_printf(const char * format, ...)
 						count += 2;
 					}
 
-					ft_putnbr_hex((unsigned long)arg, 1, delta);
-					if ((delta > 0) && flags.minus)
+					ft_putnbr_hex((unsigned long)arg, 1, flags.zero * delta);
+					if ((delta > 0) && flags.minus && !flags.zero)
 					{
-						while (delta-- && ++count)
+						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
 					count += max(flags.width, len); 

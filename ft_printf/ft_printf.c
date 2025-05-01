@@ -116,7 +116,18 @@ int ft_printf(const char * format, ...)
 				if (conversion == 'c')
 				{
 					char arg = va_arg(args, int);
+					int delta = flags.width - 1;
+					if ((delta > 0) && !flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
 					write(STDOUT_FILENO, &arg, 1);
+					if ((delta > 0) && flags.minus)
+					{
+						while (delta-- && ++count)
+							ft_putchar_fd(' ', 1);
+					}
 					count++;
 					format++;
 				}

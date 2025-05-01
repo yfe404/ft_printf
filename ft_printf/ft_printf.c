@@ -228,20 +228,23 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'd')
 				{
 					int arg = va_arg(args, int);
-					if (flags.space)
+					char prefix;
+					if (flags.space || flags.plus)
 					{
-						if (arg >= 0)
-							ft_putchar_fd(' ', 1);
+						prefix = flags.plus * '+';
+						prefix = prefix + !prefix * ' ';
 					}
 					flags.zero &= !(flags.precision || flags.minus);
 
-					int len = ft_count_digits_dec(arg) + flags.space * (arg >= 0); 
+					int len = ft_count_digits_dec(arg) + (flags.plus || flags.space) * (arg >= 0); 
 					int delta = flags.width - len;
 					if ((delta > 0) && !flags.minus && !flags.zero)
 					{
 						while (delta--)
 							ft_putchar_fd(' ', 1);
 					}
+					if ((flags.space || flags.plus) && (arg >= 0)) 
+						ft_putchar_fd(prefix, 1);
 					ft_putnbr_padding(arg, flags.zero * delta);
 					if ((delta > 0) && flags.minus && !flags.zero)
 					{

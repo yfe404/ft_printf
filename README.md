@@ -14,5 +14,5 @@
 [ ] dot for X
 [ ] hash for x
 [ ] hash for X
-[ ] plus for d
+[X] plus for d
 [ ] plus for i

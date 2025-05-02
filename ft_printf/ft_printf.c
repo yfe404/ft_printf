@@ -256,7 +256,15 @@ int ft_printf(const char * format, ...)
 						prefix = flags.plus * '+';
 						prefix = prefix + !prefix * ' ';
 					}
-					flags.zero &= !(flags.precision || flags.minus);
+					flags.zero &= !(flags.dot || flags.minus);
+					if (flags.dot)
+					{
+						if (flags.precision > 0)
+						{
+							flags.zero = 1;
+							flags.width = flags.precision + (arg < 0);
+						}
+					}
 
 					int len = ft_count_digits_dec(arg) + (flags.plus || flags.space) * (arg >= 0); 
 					int delta = flags.width - len;

@@ -7,9 +7,9 @@
 [X] zero for x
 [X] zero for X
 [X] dot for s
-[ ] dot for d
-[ ] dot for i
-[ ] dot for u
+[X] dot for d
+[X] dot for i
+[X] dot for u
 [ ] dot for x
 [ ] dot for X
 [X] hash for x

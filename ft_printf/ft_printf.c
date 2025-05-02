@@ -289,7 +289,14 @@ int ft_printf(const char * format, ...)
 				{
 					unsigned int arg = va_arg(args, unsigned int);
 					flags.zero &= !(flags.precision || flags.minus);
-
+					if (flags.dot)
+					{
+						if (flags.precision > 0)
+						{
+							flags.zero = 1;
+							flags.width = flags.precision;
+						}
+					}
 					int len = ft_count_digits_uint(arg);
 					int delta = flags.width - len;
 					if ((delta > 0) && !flags.minus && !flags.zero)

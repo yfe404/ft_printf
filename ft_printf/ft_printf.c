@@ -235,15 +235,46 @@ int ft_printf(const char * format, ...)
 					void *arg = va_arg(args, void*);
 					if (arg == NULL)
 					{
+						if (flags.width > 5)
+						{
+							int count = flags.width - 5;
+							if (!flags.minus)
+							{
+								while (count--)
+									ft_putchar_fd(' ', 1);
+							}
+						}
 						ft_putstr_fd("(nil)", 1);
-						count += 5;
+						if (flags.width > 5)
+						{
+							int count = flags.width - 5;
+							if (flags.minus)
+							{
+								while (count--)
+									ft_putchar_fd(' ', 1);
+							}
+						}
+						count += max(5, flags.width);
 					}
 					else
 					{
+						int len = ft_count_digits_hex((unsigned long)arg) + 2; 
+						int delta = flags.width - len;
+						if ((delta > 0) && !flags.minus)
+						{
+							while (delta-- && ++count)
+								ft_putchar_fd(' ', 1);
+						}
+
 						write(1, "0x", 2);
 						ft_putnbr_hex((unsigned long)arg, 0, 0);
-						count += 2;
-						count += ft_count_digits_hex((unsigned long)arg);
+						if ((delta > 0) && flags.minus)
+						{
+							while (delta-- && ++count)
+								ft_putchar_fd(' ', 1);
+						}
+						
+						count += len;
 					}
 					format += 1;
 				}

@@ -2,7 +2,7 @@
 
 ## What I still need to implement: 
 
-[ ] minus for p
+[X] minus for p
 [X] zero for u
 [X] zero for x
 [X] zero for X

@@ -10,8 +10,8 @@
 [X] dot for d
 [X] dot for i
 [X] dot for u
-[ ] dot for x
-[ ] dot for X
+[X] dot for x
+[X] dot for X
 [X] hash for x
 [X] hash for X
 [X] plus for d

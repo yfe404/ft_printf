@@ -318,6 +318,14 @@ int ft_printf(const char * format, ...)
 				{
 					unsigned int arg = va_arg(args, unsigned int);
 					flags.zero &= !(flags.precision || flags.minus);
+					if (flags.dot)
+					{
+						if (flags.precision > 0)
+						{
+							flags.zero = 1;
+							flags.width = flags.precision;
+						}
+					}
 
 					int len = ft_count_digits_hex((unsigned long)arg);
 					int delta = flags.width - len;
@@ -346,6 +354,14 @@ int ft_printf(const char * format, ...)
 				{
 					unsigned int arg = va_arg(args, unsigned int);
 					flags.zero &= !(flags.precision || flags.minus);
+					if (flags.dot)
+					{
+						if (flags.precision > 0)
+						{
+							flags.zero = 1;
+							flags.width = flags.precision;
+						}
+					}
 
 					int len = ft_count_digits_hex((unsigned long)arg);
 					int delta = flags.width - len;

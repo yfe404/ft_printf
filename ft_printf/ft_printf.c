@@ -415,7 +415,8 @@ int ft_printf(const char * format, ...)
 				count++;
 				format++;
 			} 
-
+		}
+	}
 	write(STDOUT_FILENO, "\0", 1);
 
 	va_end(args);

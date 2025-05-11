@@ -124,20 +124,6 @@ int ft_printf(const char * format, ...)
 	va_list args;
 	va_start(args, format);
 
-	// Need to handle: cspdiuxX%
-	// c: unsigned char 
-	// s: const char *
-	// p: void * pointer argument (printed in hexadecimal)
-	// d: int (signed decimal notation)
-	// i: same as d ? 
-	// u: unsigned int argument (unsigned decimal notation)
-	// x: unsigned int argument (unsigned hexadecimal lowercase abcdef)
-	// X: unsigned int argument (unsigned hexadecimal uppercase ABCDEF)
-	// %: used for formatting, in front of a '%', prints % litterally. 
-	
-	//	int x = va_arg(args, int);
-	//
-
 	int count = 0;
 	if (format && *format) 
 	{
@@ -429,30 +415,6 @@ int ft_printf(const char * format, ...)
 				count++;
 				format++;
 			} 
-			/*else  // Handle format
-			{
-				if (*(ptr + 1)) 
-				{
-					if (*(ptr + 1) == 's') // Handle string format
-					{
-						char *str = va_arg(args, char*);
-						int len = 0;
-						len = ft_strlen(str);
-						ft_putstr_fd(str, 1);
-						count += len;
-						ptr += len;
-					}
-					else if (*(ptr + 1) == 'd') // Handle int format
-					{
-						int arg = va_arg(args, int);
-						(void)arg;
-						arg += 0; // just to bp with gdp
-					}
-
-				}
-			} */
-		}
-	}
 
 	write(STDOUT_FILENO, "\0", 1);
 

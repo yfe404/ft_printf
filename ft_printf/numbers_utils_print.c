@@ -1,42 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   numbers_utils.c                                    :+:      :+:    :+:   */
+/*   numbers_utils_print.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yfeunteu <yfeunteu@student.42prague.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 21:38:28 by yfeunteu          #+#    #+#             */
-/*   Updated: 2025/06/03 21:38:29 by yfeunteu         ###   ########.fr       */
+/*   Created: 2025/06/03 21:54:13 by yfeunteu          #+#    #+#             */
+/*   Updated: 2025/06/03 21:54:15 by yfeunteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_count_digits_hex(unsigned long nb)
+void	ft_putuint(unsigned int nbr, int padding)
 {
-	if (nb < 16)
-		return (1);
-	return (1 + ft_count_digits_hex(nb / 16));
-}
-
-int	ft_count_digits_dec(int nb)
-{
-	if (nb == 0)
-		return (1);
-	if (nb <= -10)
-		return (2 + ft_count_digits_dec(-(nb / 10)));
-	if (nb < 0)
-		return (2);
-	if (nb < 10)
-		return (1);
-	return (1 + ft_count_digits_dec(nb / 10));
-}
-
-int	ft_count_digits_uint(unsigned int nbr)
-{
+	while (padding-- > 0)
+		ft_putchar_fd('0', 1);
 	if (nbr < 10)
-		return (1);
-	return (1 + ft_count_digits_uint(nbr / 10));
+	{
+		ft_putchar_fd(nbr + '0', 1);
+		return ;
+	}
+	if (nbr)
+	{
+		ft_putuint(nbr / 10, 0);
+		ft_putchar_fd((nbr % 10) + '0', 1);
+	}
 }
 
 void	ft_putnbr_hex(unsigned long nbr, unsigned char upper, int padding)

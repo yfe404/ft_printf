@@ -3,7 +3,8 @@
 
 #include "libft.h"
 #include "parsing.h"
-#include "numbers_utils.h"
+#include "numbers_utils_print.h"
+#include "numbers_utils_count.h"
 
 int max(int a, int b)
 {
@@ -17,23 +18,6 @@ int min(int a, int b)
 	if (a < b)
 		return a;
 	return b;
-}
-
-void	ft_putuint(unsigned int nbr, int padding)
-{
-	while (padding-- > 0)
-		ft_putchar_fd('0', 1);
-	if (nbr < 10)
-	{
-		ft_putchar_fd(nbr + '0', 1);
-		return;
-	}
-	if (nbr)
-	{
-		ft_putuint(nbr / 10, 0);
-		ft_putchar_fd((nbr % 10) + '0', 1);
-	}
-
 }
 
 

@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   numbers_utils.h                                    :+:      :+:    :+:   */
+/*   numbers_utils_count.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yfeunteu <yfeunteu@student.42prague.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 21:39:59 by yfeunteu          #+#    #+#             */
-/*   Updated: 2025/06/03 21:40:48 by yfeunteu         ###   ########.fr       */
+/*   Created: 2025/06/03 21:56:02 by yfeunteu          #+#    #+#             */
+/*   Updated: 2025/06/03 21:56:08 by yfeunteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef NUMBERS_UTILS_H
-# define NUMBERS_UTILS_H
+#ifndef NUMBERS_UTILS_COUNT_H
+# define NUMBERS_UTILS_COUNT_H
 
 int		ft_count_digits_hex(unsigned long nb);
 int		ft_count_digits_dec(int nb);
 int		ft_count_digits_uint(unsigned int nbr);
-void	ft_putnbr_hex(unsigned long nbr, unsigned char upper, int padding);
-void	ft_putnbr_padding(int nb, int padding);
 
 #endif

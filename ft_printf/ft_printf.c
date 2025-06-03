@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: yfeunteu <yfeunteu@student.42prague.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/04 01:10:17 by yfeunteu          #+#    #+#             */
+/*   Updated: 2025/06/04 01:10:18 by yfeunteu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 #include <stdarg.h>
 
@@ -7,18 +19,74 @@
 #include "numbers_utils_print.h"
 #include "numbers_utils_count.h"
 
+int	func_int(int arg, t_flags flags);
 int	func_u(unsigned int arg, t_flags flags);
 int	func_x(unsigned int arg, t_flags flags);
 int	func_upper_x(unsigned int arg, t_flags flags);
+int	func_c(char arg, t_flags flags, int count);
+int	func_s(char *arg, t_flags flags, int count);
+int	func_ptr(void *arg, t_flags flags, int count);
 
-
-int ft_printf(const char * format, ...)
+static int	__match_one_of(char c, char *charset)
 {
-	va_list args;
-	va_start(args, format);
+	while (*charset)
+		if (c == *charset++)
+			return (1);
+	return (0);
+}
 
-	int count = 0;
-	if (format && *format) 
+static int	__conversion(char conv, va_list args, t_flags flags, int count)
+{
+	if (conv == 'u')
+		return (count + func_u(va_arg(args, unsigned int), flags));
+	else if (conv == 'x')
+		return (count + func_x(va_arg(args, unsigned int), flags));
+	else if (conv == 'X')
+		return (count + func_upper_x(va_arg(args, unsigned int), flags));
+	else if (conv == 'c')
+		return (func_c(va_arg(args, int), flags, count));
+	else if (conv == 's')
+		return (func_s(va_arg(args, char *), flags, count));
+	else if (conv == 'p')
+		return (func_ptr(va_arg(args, void *), flags, count));
+	else if (conv == 'd' || conv == 'i')
+		return (count + func_int(va_arg(args, int), flags));
+	else if (conv == '%')
+	{
+		ft_putchar_fd('%', 1);
+		return (count + 1);
+	}
+	return (count);
+}
+
+static int	__conv_handler(const char **format, va_list args, int count)
+{
+	t_flags	flags;
+
+	flags = init_flags();
+	*format = parse_flags(*format, &flags);
+	*format = parse_width(*format, &flags);
+	*format = parse_precision(*format, &flags);
+	count = __conversion(*(*format), args, flags, count);
+	if (__match_one_of(*(*format), "uxXcspdi%"))
+		(*format)++;
+	return (count);
+}
+
+static int	__printc(char c, int count)
+{
+	write(STDOUT_FILENO, &c, 1);
+	return (count + 1);
+}
+
+int	ft_printf(const char *format, ...)
+{
+	va_list	args;
+	int		count;
+
+	va_start(args, format);
+	count = 0;
+	if (format && *format)
 	{
 		while (*format)
 		{
@@ -26,211 +94,14 @@ int ft_printf(const char * format, ...)
 			{
 				format++;
 				if (!format)
-					break;
-   				t_flags flags = init_flags();
-    			format = parse_flags(format, &flags);
-			    format = parse_width(format, &flags);
-    			format = parse_precision(format, &flags);
-
-				char conversion = *format;
-				if (conversion == 'c')
-				{
-					char arg = va_arg(args, int);
-					int delta = flags.width - 1;
-					if ((delta > 0) && !flags.minus)
-					{
-						while (delta-- && ++count)
-							ft_putchar_fd(' ', 1);
-					}
-					write(STDOUT_FILENO, &arg, 1);
-					if ((delta > 0) && flags.minus)
-					{
-						while (delta-- && ++count)
-							ft_putchar_fd(' ', 1);
-					}
-					count++;
-					format++;
-				}
-				else if (conversion == 's')
-				{
-					int len = 0;
-					char *arg = va_arg(args, char*);
-
-					if (arg == NULL)
-					{
-						if (flags.width > 6)
-						{
-							int count = flags.width - 6;
-							if (!flags.minus)
-							{
-								while (count--)
-									ft_putchar_fd(' ', 1);
-							}
-						}
-						ft_putstr_fd("(null)", 1);
-						if (flags.width > 6)
-						{
-							int count = flags.width - 6;
-							if (flags.minus)
-							{
-								while (count--)
-									ft_putchar_fd(' ', 1);
-							}
-						}
-						count += max(6, flags.width);
-					}
-					else
-					{
-						len = ft_strlen(arg);
-						int delta = flags.width - len;
-						if ((delta > 0) && !flags.minus)
-						{
-							while (delta-- && ++count)
-								ft_putchar_fd(' ', 1);
-						}
-						if (flags.dot)
-						{	count += min(len,flags.precision);
-							int iter = min(len, flags.precision);
-							int offset = 0;
-							while (iter--)
-								ft_putchar_fd(arg[offset++], 1);
-						}
-						else
-						{
-							ft_putstr_fd(arg, 1);
-							count += len;
-						}
-						if ((delta > 0) && flags.minus)
-						{
-							while (delta-- && ++count)
-								ft_putchar_fd(' ', 1);
-						}
-						//count += len;
-					}
-					format += 1;
-				}
-				else if (conversion == 'p')
-				{
-					void *arg = va_arg(args, void*);
-					if (arg == NULL)
-					{
-						if (flags.width > 5)
-						{
-							int count = flags.width - 5;
-							if (!flags.minus)
-							{
-								while (count--)
-									ft_putchar_fd(' ', 1);
-							}
-						}
-						ft_putstr_fd("(nil)", 1);
-						if (flags.width > 5)
-						{
-							int count = flags.width - 5;
-							if (flags.minus)
-							{
-								while (count--)
-									ft_putchar_fd(' ', 1);
-							}
-						}
-						count += max(5, flags.width);
-					}
-					else
-					{
-						int len = ft_count_digits_hex((unsigned long)arg) + 2; 
-						int delta = flags.width - len;
-						if ((delta > 0) && !flags.minus)
-						{
-							while (delta-- && ++count)
-								ft_putchar_fd(' ', 1);
-						}
-
-						write(1, "0x", 2);
-						ft_putnbr_hex((unsigned long)arg, 0, 0);
-						if ((delta > 0) && flags.minus)
-						{
-							while (delta-- && ++count)
-								ft_putchar_fd(' ', 1);
-						}
-						
-						count += len;
-					}
-					format += 1;
-				}
-				else if (conversion == 'd' || conversion == 'i')
-				{
-					int arg = va_arg(args, int);
-					char prefix;
-					if (flags.space || flags.plus)
-					{
-						prefix = flags.plus * '+';
-						prefix = prefix + !prefix * ' ';
-					}
-					flags.zero &= !(flags.dot || flags.minus);
-					if (flags.dot)
-					{
-						if (flags.precision > 0)
-						{
-							flags.zero = 1;
-							flags.width = flags.precision + (arg < 0);
-						}
-					}
-
-					int len = ft_count_digits_dec(arg) + (flags.plus || flags.space) * (arg >= 0); 
-					int delta = flags.width - len;
-					if ((delta > 0) && !flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					if ((flags.space || flags.plus) && (arg >= 0)) 
-						ft_putchar_fd(prefix, 1);
-					ft_putnbr_padding(arg, flags.zero * delta);
-					if ((delta > 0) && flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-
-					count += max(flags.width, len); 
-					format += 1;
-				}
-				else if (conversion == 'u')
-				{
-					unsigned int arg = va_arg(args, unsigned int);
-					count += func_u(arg, flags);
-					format += 1;
-				}
-				else if (conversion == 'x')
-				{
-					unsigned int arg = va_arg(args, unsigned int);
-					count += func_x(arg, flags);
-					format += 1;
-				}
-				else if (conversion == 'X')
-				{
-					unsigned int arg = va_arg(args, unsigned int);
-					count += func_upper_x(arg, flags);
-					format += 1;
-				}
-				else if (conversion == '%')
-				{
-					ft_putchar_fd('%', 1);
-					count += 1;
-					format += 1;
-				}
+					break ;
+				count = __conv_handler(&format, args, count);
 			}
 			else
-			{
-				write(STDOUT_FILENO, format, 1);
-				count++;
-				format++;
-			} 
+				count = __printc(*format++, count);
 		}
 	}
 	write(STDOUT_FILENO, "\0", 1);
-
 	va_end(args);
 	return (count);
 }
-

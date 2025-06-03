@@ -2,23 +2,14 @@
 #include <stdarg.h>
 
 #include "libft.h"
+#include "utils.h"
 #include "parsing.h"
 #include "numbers_utils_print.h"
 #include "numbers_utils_count.h"
 
-int max(int a, int b)
-{
-	if (a > b)
-		return a;
-	return b;
-}
-
-int min(int a, int b)
-{
-	if (a < b)
-		return a;
-	return b;
-}
+int	func_u(unsigned int arg, t_flags flags);
+int	func_x(unsigned int arg, t_flags flags);
+int	func_upper_x(unsigned int arg, t_flags flags);
 
 
 int ft_printf(const char * format, ...)
@@ -207,101 +198,19 @@ int ft_printf(const char * format, ...)
 				else if (conversion == 'u')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
-					flags.zero &= !(flags.precision || flags.minus);
-					if (flags.dot)
-					{
-						if (flags.precision > 0)
-						{
-							flags.zero = 1;
-							flags.width = flags.precision;
-						}
-					}
-					int len = ft_count_digits_uint(arg);
-					int delta = flags.width - len;
-					if ((delta > 0) && !flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					ft_putuint(arg, flags.zero * delta);
-					if ((delta > 0) && flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					count += max(flags.width, len); 
-					//count += len; 
+					count += func_u(arg, flags);
 					format += 1;
 				}
 				else if (conversion == 'x')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
-					flags.zero &= !(flags.precision || flags.minus);
-					if (flags.dot)
-					{
-						if (flags.precision > 0)
-						{
-							flags.zero = 1;
-							flags.width = flags.precision;
-						}
-					}
-
-					int len = ft_count_digits_hex((unsigned long)arg);
-					int delta = flags.width - len;
-					if ((delta > 0) && !flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					if (arg && flags.hash)
-					{
-						ft_putstr_fd("0x", 1);
-						count += 2;
-					}
-						
-					ft_putnbr_hex((unsigned long)arg, 0, flags.zero * delta);
-					if ((delta > 0) && flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					count += max(flags.width, len); 
-					//count += len;
+					count += func_x(arg, flags);
 					format += 1;
 				}
 				else if (conversion == 'X')
 				{
 					unsigned int arg = va_arg(args, unsigned int);
-					flags.zero &= !(flags.precision || flags.minus);
-					if (flags.dot)
-					{
-						if (flags.precision > 0)
-						{
-							flags.zero = 1;
-							flags.width = flags.precision;
-						}
-					}
-
-					int len = ft_count_digits_hex((unsigned long)arg);
-					int delta = flags.width - len;
-					if ((delta > 0) && !flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					if (arg && flags.hash)
-					{
-						ft_putstr_fd("0X", 1);
-						count += 2;
-					}
-
-					ft_putnbr_hex((unsigned long)arg, 1, flags.zero * delta);
-					if ((delta > 0) && flags.minus && !flags.zero)
-					{
-						while (delta--)
-							ft_putchar_fd(' ', 1);
-					}
-					count += max(flags.width, len); 
+					count += func_upper_x(arg, flags);
 					format += 1;
 				}
 				else if (conversion == '%')

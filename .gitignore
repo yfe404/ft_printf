@@ -1,1 +1,4 @@
 printfTester/
+*.o
+*.a
+main.c

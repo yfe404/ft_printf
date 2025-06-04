@@ -6,7 +6,7 @@
 /*   By: yfeunteu <yfeunteu@student.42prague.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 01:10:17 by yfeunteu          #+#    #+#             */
-/*   Updated: 2025/06/04 13:23:07 by yfeunteu         ###   ########.fr       */
+/*   Updated: 2025/06/04 16:30:55 by yfeunteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ int	ft_printf(const char *format, ...)
 				count = __printc(*format++, count);
 		}
 	}
-	write(STDOUT_FILENO, "\0", 1);
 	va_end(args);
 	return (count);
 }

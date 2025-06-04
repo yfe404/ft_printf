@@ -6,7 +6,7 @@
 /*   By: yfeunteu <yfeunteu@student.42prague.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 00:16:49 by yfeunteu          #+#    #+#             */
-/*   Updated: 2025/06/04 00:16:51 by yfeunteu         ###   ########.fr       */
+/*   Updated: 2025/06/04 22:35:19 by yfeunteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,21 +19,18 @@
 
 static int	__func_ptr_null(t_flags flags, int count)
 {
+	int	pad_count;
+
+	pad_count = flags.width - 5;
 	if (flags.width > 5)
-	{
-		count = flags.width - 5;
 		if (!flags.minus)
-			while (count--)
+			while (pad_count--)
 				ft_putchar_fd(' ', 1);
-	}
 	ft_putstr_fd("(nil)", 1);
 	if (flags.width > 5)
-	{
-		count = flags.width - 5;
 		if (flags.minus)
-			while (count--)
+			while (pad_count--)
 				ft_putchar_fd(' ', 1);
-	}
 	count += max(5, flags.width);
 	return (count);
 }

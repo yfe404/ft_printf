@@ -21,7 +21,7 @@ OBJS_CONV			= $(SRCS_CONV:.c=.o)
 
 # Compiler and flags
 CC					= cc
-CFLAGS				= -Wall -Wextra -Werror -g
+CFLAGS				= -Wall -Wextra -Werror
 
 # Commands
 AR          = ar rcs

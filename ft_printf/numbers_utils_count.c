@@ -6,7 +6,7 @@
 /*   By: yfeunteu <yfeunteu@student.42prague.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 21:53:32 by yfeunteu          #+#    #+#             */
-/*   Updated: 2025/06/03 21:59:20 by yfeunteu         ###   ########.fr       */
+/*   Updated: 2025/06/05 00:40:22 by yfeunteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ int	ft_count_digits_dec(int nb)
 	if (nb == 0)
 		return (1);
 	if (nb <= -10)
-		return (2 + ft_count_digits_dec(-(nb / 10)));
+		return (1 + ft_count_digits_dec(-(nb / 10)));
 	if (nb < 0)
-		return (2);
+		return (1);
 	if (nb < 10)
 		return (1);
 	return (1 + ft_count_digits_dec(nb / 10));

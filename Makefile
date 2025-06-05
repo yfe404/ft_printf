@@ -11,7 +11,7 @@ LIBFT_DIR			= libft
 
 # Source files
 SRCS_FILES			= ft_printf.c parsing.c numbers_utils_count.c numbers_utils_print.c utils.c
-SRCS_FILES_CONV		= ft_uint.c ft_int.c ft_string.c ft_pointer.c
+SRCS_FILES_CONV		= ft_uint.c ft_int.c ft_string.c ft_pointer.c ft_hex.c common.c
 
 SRCS				= $(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 SRCS_CONV			= $(addprefix $(SRCS_DIR_CONV)/, $(SRCS_FILES_CONV))
@@ -21,7 +21,7 @@ OBJS_CONV			= $(SRCS_CONV:.c=.o)
 
 # Compiler and flags
 CC					= cc
-CFLAGS				= -Wall -Wextra -Werror
+CFLAGS				= -Wall -Wextra -Werror -g
 
 # Commands
 AR          = ar rcs

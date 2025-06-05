@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_uint.c                                          :+:      :+:    :+:   */
+/*   ft_hex.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yfeunteu <yfeunteu@student.42prague.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/03 23:14:45 by yfeunteu          #+#    #+#             */
-/*   Updated: 2025/06/05 11:26:06 by yfeunteu         ###   ########.fr       */
+/*   Created: 2025/06/05 11:21:06 by yfeunteu          #+#    #+#             */
+/*   Updated: 2025/06/05 11:24:00 by yfeunteu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	zeros(int number, t_flags flags, t_format *format)
 
 	if (!flags.dot)
 		return (0);
-	digits_count = ft_count_digits_uint(number);
+	digits_count = ft_count_digits_hex((unsigned int)number);
 	format->n_zeros = max(0, flags.precision - digits_count);
 	return (format->n_zeros);
 }
@@ -32,8 +32,8 @@ static int	padding(int num, t_flags flags, t_format *format)
 {
 	int	pad_width;
 
-	pad_width = max(0, flags.width \
-	- format->n_zeros - ft_count_digits_uint(num));
+	pad_width = max(0, flags.width - format->n_zeros \
+	- ft_count_digits_hex((unsigned int)num) - 2 * flags.hash);
 	if (flags.minus)
 		format->n_pad_right = pad_width;
 	else
@@ -45,13 +45,12 @@ static int	padding(int num, t_flags flags, t_format *format)
 	return (pad_width);
 }
 
-int	func_u(unsigned int arg, t_flags flags)
+int	func_x(unsigned int arg, t_flags flags)
 {
 	int			count;
 	t_format	format;
 
 	format = init_format();
-	count = 0;
 	if (arg == 0 && flags.precision == 0 && flags.dot)
 	{
 		count = flags.width;
@@ -59,16 +58,46 @@ int	func_u(unsigned int arg, t_flags flags)
 			ft_putchar_fd(' ', 1);
 		return (count);
 	}
-	count += zeros(arg, flags, &format);
-	count += padding(arg, flags, &format);
-	count += ft_count_digits_uint(arg);
+	count = zeros(arg, flags, &format) + padding(arg, flags, &format);
+	count += ft_count_digits_hex((unsigned long)arg) + 2 * (arg && flags.hash);
 	while (format.pad_chr == ' ' && format.n_pad_left--)
 		ft_putchar_fd(' ', 1);
+	if (arg && flags.hash)
+		ft_putstr_fd("0x", 1);
 	while (format.pad_chr == '0' && format.n_pad_left--)
 		ft_putchar_fd('0', 1);
 	while (format.n_zeros--)
 		ft_putchar_fd('0', 1);
-	ft_putuint(arg, 0);
+	ft_putnbr_hex(arg, 0, 0);
+	while (format.pad_chr == ' ' && format.n_pad_right--)
+		ft_putchar_fd(' ', 1);
+	return (count);
+}
+
+int	func_upper_x(unsigned int arg, t_flags flags)
+{
+	int			count;
+	t_format	format;
+
+	format = init_format();
+	if (arg == 0 && flags.precision == 0 && flags.dot)
+	{
+		count = flags.width;
+		while (flags.width--)
+			ft_putchar_fd(' ', 1);
+		return (count);
+	}
+	count = zeros(arg, flags, &format) + padding(arg, flags, &format);
+	count += ft_count_digits_hex((unsigned long)arg) + 2 * (arg && flags.hash);
+	while (format.pad_chr == ' ' && format.n_pad_left--)
+		ft_putchar_fd(' ', 1);
+	if (arg && flags.hash)
+		ft_putstr_fd("0X", 1);
+	while (format.pad_chr == '0' && format.n_pad_left--)
+		ft_putchar_fd('0', 1);
+	while (format.n_zeros--)
+		ft_putchar_fd('0', 1);
+	ft_putnbr_hex(arg, 1, 0);
 	while (format.pad_chr == ' ' && format.n_pad_right--)
 		ft_putchar_fd(' ', 1);
 	return (count);
